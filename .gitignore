@@ -1,0 +1,173 @@
+# EUDI-Connect .gitignore
+# Comprehensive configuration for FastAPI, Next.js, and DIDKit integration
+
+# ------------------------------
+# Python / FastAPI Backend
+# ------------------------------
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+!.env.example
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+.Python
+dist/
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing and coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+coverage.xml
+*.cover
+.hypothesis/
+nosetests.xml
+.nox/
+
+# OpenTelemetry traces
+traces/
+
+# SQLAlchemy
+*.sqlite3
+*.db
+
+# Alembic
+alembic/versions/__pycache__/
+
+# ------------------------------
+# JavaScript / Next.js Dashboard
+# ------------------------------
+# Dependencies
+node_modules/
+packages/dashboard/node_modules/
+packages/sdk/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.npm/
+yarn.lock
+package-lock.json
+!/yarn.lock
+!/package-lock.json
+
+# Next.js build output
+.next/
+packages/dashboard/.next/
+out/
+packages/dashboard/out/
+build/
+packages/dashboard/build/
+.vercel
+.turbo
+next-env.d.ts
+packages/dashboard/next-env.d.ts
+
+# Typescript
+*.tsbuildinfo
+
+# Storybook
+storybook-static/
+
+# ------------------------------
+# DIDKit Specific
+# ------------------------------
+# Test keys
+*didkit_test_key.json
+didkit_key.json
+
+# ------------------------------
+# IDE / Editor
+# ------------------------------
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# Other editors
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ------------------------------
+# Misc
+# ------------------------------
+# Logs
+logs
+*.log
+
+# Local configuration
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+packages/dashboard/.env.local
+packages/dashboard/.env.development.local
+packages/dashboard/.env.test.local
+packages/dashboard/.env.production.local
+packages/api/.env.local
+packages/api/.env.development
+packages/api/.env.test
+packages/api/.env.production
+
+# OS specific
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Cloudflare Workers
+.wrangler/
+.cloudflare/
+
+# Supabase
+.supabase/
+
+# Stripe CLI
+.stripe/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp

@@ -1,0 +1,53 @@
+{
+  "creation": {
+    "mean_avg": 0.06437301635742188,
+    "mean_min": 0.06437301635742188,
+    "mean_max": 0.06437301635742188,
+    "median_avg": 0.051021575927734375,
+    "median_min": 0.051021575927734375,
+    "median_max": 0.051021575927734375,
+    "min_avg": 0.04506111145019531,
+    "min_min": 0.04506111145019531,
+    "min_max": 0.04506111145019531,
+    "max_avg": 0.09703636169433594,
+    "max_min": 0.09703636169433594,
+    "max_max": 0.09703636169433594,
+    "p95_avg": 0.09703636169433594,
+    "p95_min": 0.09703636169433594,
+    "p95_max": 0.09703636169433594,
+    "p99_avg": 0.09703636169433594,
+    "p99_min": 0.09703636169433594,
+    "p99_max": 0.09703636169433594,
+    "total_samples": 3
+  },
+  "rendering": {
+    "html": {
+      "total_samples": 0
+    },
+    "plain": {
+      "total_samples": 0
+    },
+    "slack": {
+      "total_samples": 0
+    },
+    "webhook_json": {
+      "total_samples": 0
+    }
+  },
+  "system_info": {
+    "timestamp": "2025-05-27T11:35:58.093769+00:00",
+    "num_templates": 3,
+    "num_alerts": 60,
+    "iterations": 1,
+    "performance_targets": {
+      "mvp": 800,
+      "future": 300,
+      "template_render": 10
+    }
+  },
+  "meets_targets": {
+    "template_render": false,
+    "mvp_latency": false,
+    "future_latency": false
+  }
+}

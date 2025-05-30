@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header with Logo -->
+        <div class="text-center mb-12">
+            <div class="flex justify-center mb-4">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMnYyME0yIDEyaDIwIi8+PC9zdmc+" alt="Logo" class="h-16 w-16">
+            </div>
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ title }}</h1>
+            <p class="text-xl text-gray-600">{{ description }}</p>
+            <div class="mt-4 flex justify-center space-x-4 text-sm text-gray-500">
+                <p>Generated: {{ timestamp }}</p>
+                <p>•</p>
+                <p>Test Duration: {{ duration }}</p>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="bg-white shadow rounded-lg p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-6">Executive Summary</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-medium text-blue-800">Total Tests</h3>
+                        <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                    </div>
+                    <p class="mt-4 text-3xl font-semibold text-blue-900">{{ total_tests }}</p>
+                    <p class="mt-2 text-sm text-blue-700">Total test cases executed</p>
+                </div>
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-medium text-green-800">Success Rate</h3>
+                        <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <p class="mt-4 text-3xl font-semibold text-green-900">{{ success_rate }}%</p>
+                    <p class="mt-2 text-sm text-green-700">{{ successful_tests }} successful tests</p>
+                </div>
+                <div class="bg-red-50 p-6 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-medium text-red-800">Failed Tests</h3>
+                        <svg class="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <p class="mt-4 text-3xl font-semibold text-red-900">{{ failed_tests }}</p>
+                    <p class="mt-2 text-sm text-red-700">Tests requiring attention</p>
+                </div>
+                <div class="bg-yellow-50 p-6 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-medium text-yellow-800">Total Alerts</h3>
+                        <svg class="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                    </div>
+                    <p class="mt-4 text-3xl font-semibold text-yellow-900">{{ total_alerts }}</p>
+                    <p class="mt-2 text-sm text-yellow-700">Alerts generated</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rule Results -->
+        <div class="bg-white shadow rounded-lg p-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-semibold">Results by Rule</h2>
+                <div class="flex space-x-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        {{ rule_count }} Rules
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                        {{ category_count }} Categories
+                    </span>
+                </div>
+            </div>
+
+            <!-- Rule Chart -->
+            <div class="mb-8 bg-gray-50 p-4 rounded-lg">
+                <div id="ruleChart">{{ rule_chart | safe }}</div>
+            </div>
+
+            <!-- Rule Metrics Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            {% for header in rule_headers %}
+                            <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ header }}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for row in rule_data %}
+                        <tr class="hover:bg-gray-50">
+                            {% for value in row %}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Scenario Results -->
+        <div class="bg-white shadow rounded-lg p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-semibold">Results by Scenario</h2>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                    {{ scenario_count }} Scenarios
+                </span>
+            </div>
+
+            <!-- Scenario Chart -->
+            <div class="mb-8 bg-gray-50 p-4 rounded-lg">
+                <div id="scenarioChart">{{ scenario_chart | safe }}</div>
+            </div>
+
+            <!-- Scenario Metrics Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            {% for header in scenario_headers %}
+                            <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ header }}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for row in scenario_data %}
+                        <tr class="hover:bg-gray-50">
+                            {% for value in row %}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center text-sm text-gray-500">
+            <p>EUDI-Connect Performance Testing Report</p>
+            <p class="mt-1">Generated by Alert Testing System</p>
+        </div>
+    </div>
+</body>
+</html>

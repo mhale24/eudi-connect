@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">{{ title }}</h1>
+            <p class="mt-2 text-gray-600">{{ description }}</p>
+            <p class="text-sm text-gray-500">Generated: {{ timestamp }}</p>
+        </div>
+
+        <!-- Summary -->
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Test Summary</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-sm font-medium text-blue-800">Total Tests</h3>
+                    <p class="mt-2 text-3xl font-semibold text-blue-900">{{ total_tests }}</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="text-sm font-medium text-green-800">Successful Tests</h3>
+                    <p class="mt-2 text-3xl font-semibold text-green-900">{{ successful_tests }}</p>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <h3 class="text-sm font-medium text-red-800">Failed Tests</h3>
+                    <p class="mt-2 text-3xl font-semibold text-red-900">{{ failed_tests }}</p>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h3 class="text-sm font-medium text-yellow-800">Total Alerts</h3>
+                    <p class="mt-2 text-3xl font-semibold text-yellow-900">{{ total_alerts }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rule Results -->
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Results by Rule</h2>
+            <div class="mb-6" id="ruleChart">{{ rule_chart | safe }}</div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            {% for header in rule_headers %}
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ header }}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for row in rule_data %}
+                        <tr>
+                            {% for value in row %}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Scenario Results -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Results by Scenario</h2>
+            <div class="mb-6" id="scenarioChart">{{ scenario_chart | safe }}</div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            {% for header in scenario_headers %}
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ header }}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for row in scenario_data %}
+                        <tr>
+                            {% for value in row %}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

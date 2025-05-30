@@ -1,0 +1,53 @@
+{
+  "creation": {
+    "mean_avg": 0.06858507792154948,
+    "mean_min": 0.06858507792154948,
+    "mean_max": 0.06858507792154948,
+    "median_avg": 0.05793571472167969,
+    "median_min": 0.05793571472167969,
+    "median_max": 0.05793571472167969,
+    "min_avg": 0.04601478576660156,
+    "min_min": 0.04601478576660156,
+    "min_max": 0.04601478576660156,
+    "max_avg": 0.10180473327636719,
+    "max_min": 0.10180473327636719,
+    "max_max": 0.10180473327636719,
+    "p95_avg": 0.10180473327636719,
+    "p95_min": 0.10180473327636719,
+    "p95_max": 0.10180473327636719,
+    "p99_avg": 0.10180473327636719,
+    "p99_min": 0.10180473327636719,
+    "p99_max": 0.10180473327636719,
+    "total_samples": 3
+  },
+  "rendering": {
+    "html": {
+      "total_samples": 0
+    },
+    "plain": {
+      "total_samples": 0
+    },
+    "slack": {
+      "total_samples": 0
+    },
+    "webhook_json": {
+      "total_samples": 0
+    }
+  },
+  "system_info": {
+    "timestamp": "2025-05-27T11:35:26.562010+00:00",
+    "num_templates": 3,
+    "num_alerts": 50,
+    "iterations": 1,
+    "performance_targets": {
+      "mvp": 800,
+      "future": 300,
+      "template_render": 10
+    }
+  },
+  "meets_targets": {
+    "template_render": false,
+    "mvp_latency": false,
+    "future_latency": false
+  }
+}
