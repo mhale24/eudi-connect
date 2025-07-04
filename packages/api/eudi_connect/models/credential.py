@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Dict, List
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, JSON, String
+from sqlalchemy import DateTime, ForeignKey, JSON, String
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -61,7 +61,7 @@ class WalletSession(Base, BaseModelMixin):
     protocol: Mapped[str] = mapped_column(String(50))  # openid4vp, siopv2
     request_payload: Mapped[Dict[str, Any]] = mapped_column(JSONB)
     response_payload: Mapped[Dict[str, Any] | None] = mapped_column(JSONB)
-    expires_at: Mapped[datetime]
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=False))
 
     # Foreign keys
     merchant_id: Mapped[UUID] = mapped_column(

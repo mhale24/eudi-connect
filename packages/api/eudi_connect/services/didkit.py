@@ -1,6 +1,7 @@
 """DIDKit service for credential operations."""
 import json
 import logging
+import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict
@@ -9,6 +10,8 @@ from fastapi import HTTPException, status
 
 from eudi_connect.core.config import settings
 from eudi_connect.services import didkit_wrapper
+from eudi_connect.services.cache import get_cache_service
+from eudi_connect.models.revocation import RevocationList
 
 logger = logging.getLogger(__name__)
 
@@ -209,6 +212,73 @@ class DIDKitService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Failed to issue credential: {str(e)}"
             )
+
+    async def check_revocation_status(self, issuer_did: str, credential_type_id: str, revocation_index: int) -> bool:
+        """Check if a credential has been revoked.
+
+        Args:
+            issuer_did: The DID of the credential issuer
+            credential_type_id: The type of the credential
+            revocation_index: The index in the revocation list
+
+        Returns:
+            True if revoked, False otherwise
+        """
+        # Get the cache service
+        cache = get_cache_service()
+        
+        # Generate a cache key for this revocation check
+        cache_key = f"revocation:{issuer_did}:{credential_type_id}:{revocation_index}"
+        
+        # Try to get the result from cache first
+        cached_result = await cache.get(cache_key)
+        if cached_result is not None:
+            logger.debug(f"Cache hit for revocation status check: {cache_key}")
+            return cached_result
+            
+        logger.debug(f"Cache miss for revocation status check: {cache_key}")
+        
+        try:
+            # Get the revocation list for this issuer and credential type
+            # Note: This would need to be implemented with proper database query
+            # For now, we'll return False (not revoked) as a placeholder
+            revocation_list = None  # TODO: Implement database query for RevocationList
+            
+            if not revocation_list:
+                # No revocation list exists, so credential is not revoked
+                # Cache this result for a longer time (1 hour) as it's unlikely to change soon
+                await cache.set(cache_key, False, ttl=3600)
+                return False
+                
+            # Decompress the bitstring
+            bitstring = zlib.decompress(revocation_list.encoded_list)
+            
+            # Check the bit at the specified index
+            byte_index = revocation_index // 8
+            bit_position = revocation_index % 8
+            
+            # If the index is beyond our current bitstring length, it's not revoked
+            if byte_index >= len(bitstring):
+                # Cache this result (15 minutes)
+                await cache.set(cache_key, False, ttl=900)
+                return False
+                
+            # Check if the bit is set
+            is_revoked = bool((bitstring[byte_index] >> bit_position) & 1)
+            
+            # Cache the result - use different TTLs based on status
+            # Revoked credentials should be cached longer (1 hour) as they won't change
+            # Non-revoked might become revoked, so cache for shorter time (5 minutes)
+            ttl = 3600 if is_revoked else 300
+            await cache.set(cache_key, is_revoked, ttl=ttl)
+            
+            return is_revoked
+            
+        except Exception as e:
+            # Log the error but don't fail the check - assume not revoked
+            logger.error(f"Error checking revocation status: {e}")
+            # Don't cache errors
+            return False
 
     def verify_credential(
         self,

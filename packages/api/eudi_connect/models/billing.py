@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Dict, List
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, JSON, String
+from sqlalchemy import ForeignKey, JSON, String, DateTime
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -33,8 +33,8 @@ class MerchantSubscription(Base, BaseModelMixin):
     __tablename__ = "merchantsubscription"
     is_active: Mapped[bool] = mapped_column(default=True)
     billing_cycle: Mapped[str] = mapped_column(String(50))  # monthly, yearly
-    current_period_start: Mapped[datetime]
-    current_period_end: Mapped[datetime]
+    current_period_start: Mapped[datetime] = mapped_column(DateTime(timezone=False))
+    current_period_end: Mapped[datetime] = mapped_column(DateTime(timezone=False))
     cancel_at_period_end: Mapped[bool] = mapped_column(default=False)
     stripe_subscription_id: Mapped[str | None] = mapped_column(String(255))
     stripe_customer_id: Mapped[str | None] = mapped_column(String(255))

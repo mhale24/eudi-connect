@@ -16,7 +16,6 @@ services:
       - DEBUG=1
       - SECRET_KEY=development_secret_key
       - ALLOWED_HOSTS=localhost,127.0.0.1
-      - CORS_ORIGINS=http://localhost:3000
     depends_on:
       - db
       - redis

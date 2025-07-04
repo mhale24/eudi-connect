@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Dict, List
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, JSON, String
+from sqlalchemy import DateTime, ForeignKey, JSON, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -30,8 +30,8 @@ class ComplianceScan(Base):
     """Compliance scan model."""
     status: Mapped[str] = mapped_column(String(50))  # pending, running, completed, failed
     scan_type: Mapped[str] = mapped_column(String(50))  # full, incremental
-    started_at: Mapped[datetime | None]
-    completed_at: Mapped[datetime | None]
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=False), nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=False), nullable=True)
     error: Mapped[str | None] = mapped_column(String(1024))
     scan_metadata: Mapped[Dict[str, Any]] = mapped_column(JSONB)
 

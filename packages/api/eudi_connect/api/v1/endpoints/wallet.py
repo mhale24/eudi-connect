@@ -1,9 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Any, Dict
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import select
 
 from eudi_connect.api.deps import APIKeyAuth, DB
@@ -22,6 +22,8 @@ class WalletSessionCreate(BaseModel):
 
 class WalletSessionResponse(BaseModel):
     """Wallet session response model."""
+    model_config = ConfigDict(from_attributes=True)
+    
     id: UUID
     session_id: str
     status: str
@@ -52,7 +54,7 @@ async def create_wallet_session(
         wallet_type=request.wallet_type,
         protocol=request.protocol,
         request_payload=request.request_payload,
-        expires_at=datetime.utcnow() + timedelta(seconds=request.expires_in)
+        expires_at=(datetime.now(UTC) + timedelta(seconds=request.expires_in)).replace(tzinfo=None)
     )
     db.add(session)
     await db.commit()
@@ -81,7 +83,7 @@ async def get_wallet_session(
         )
 
     # Check if session has expired
-    if session.expires_at < datetime.utcnow():
+    if session.expires_at < datetime.now(UTC).replace(tzinfo=None):
         session.status = "failed"
         await db.commit()
 
@@ -99,7 +101,7 @@ async def submit_wallet_response(
         select(WalletSession)
         .where(WalletSession.session_id == session_id)
         .where(WalletSession.status == "pending")
-        .where(WalletSession.expires_at > datetime.utcnow())
+        .where(WalletSession.expires_at > datetime.now(UTC).replace(tzinfo=None))
     )
     session = result.scalar_one_or_none()
 

@@ -10,7 +10,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Any, TYPE_CHECKING
 import uuid
 
-from sqlalchemy import String, Boolean, ForeignKey, JSON, Enum as SQLAEnum, Integer
+from sqlalchemy import String, Boolean, ForeignKey, JSON, Enum as SQLAEnum, Integer, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -125,8 +125,8 @@ class ComplianceScan(Base, BaseModelMixin):
     manual_check_requirements: Mapped[int] = mapped_column(Integer, default=0)
     
     # Timestamps for scan execution
-    started_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
-    completed_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    started_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=False), nullable=True)
+    completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=False), nullable=True)
     
     # Relationships
     results: Mapped[List["ComplianceScanResult"]] = relationship(
@@ -159,7 +159,7 @@ class ComplianceScanResult(Base, BaseModelMixin):
     
     # Test execution information
     execution_time_ms: Mapped[int] = mapped_column(Integer, default=0)
-    executed_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    executed_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), default=lambda: datetime.utcnow().replace(tzinfo=None))
     
     # Remediation guidance
     remediation_steps: Mapped[Optional[str]] = mapped_column(String(2048), nullable=True)

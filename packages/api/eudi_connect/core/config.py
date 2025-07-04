@@ -25,13 +25,14 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=['.env', '.env.test'],
         env_file_encoding="utf-8",
-        case_sensitive=True,
+        case_sensitive=False,
     )
 
     # API settings
     PROJECT_NAME: str = "EUDI-Connect"
     VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
+    DEBUG: bool = False
     SECRET_KEY: SecretStr
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
@@ -76,7 +77,20 @@ class Settings(BaseSettings):
         )
 
     # CORS settings
-    CORS_ORIGINS: list[AnyHttpUrl] = []
+    CORS_ORIGINS: list[str] = []
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    def parse_cors_origins(cls, v: Any) -> list[str]:
+        """Parse CORS origins from string or list."""
+        if isinstance(v, str):
+            # Handle comma-separated string or single URL
+            if ',' in v:
+                return [url.strip() for url in v.split(',')]
+            else:
+                return [v.strip()]
+        elif isinstance(v, list):
+            return [str(item) for item in v]
+        return []
 
     # Email settings
     SMTP_HOST: str | None = None
